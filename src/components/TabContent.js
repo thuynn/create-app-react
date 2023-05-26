@@ -55,11 +55,11 @@ const TabContent = ({ contentEndpoint = "" }) => {
 
   if (tabContent && tabContent.type === "Font selection") {
     return (
-      <ul className="list-cards box-grid box-grid-row align-items-start gap-5 m-1 p-6">
+      <ul role="tabpanel" className="list-cards box-grid box-grid-row align-items-start gap-5 m-1 p-6">
         {
           tabContent.content.map((card, index) => {
             return (
-              <li className="card box-sm-12 box-md-6" key={index} tabIndex={index + 3}>
+              <li className="card box-sm-12 box-md-6 cursor-pointer" key={index} tabIndex={index + 3} role="button">
                 <Card info={card} onClick={selectCard} isSelected={card.id === tabContent.selectedCard}/>
               </li>
             );
@@ -71,7 +71,7 @@ const TabContent = ({ contentEndpoint = "" }) => {
 
   if (tabContent && tabContent.type === "Text") {
     return (
-      <p className="align-center p-6 font-size--default">
+      <p role="tabpanel" className="align-center p-6 font-size--default">
         {tabContent.content}
       </p>
     );

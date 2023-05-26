@@ -1,3 +1,24 @@
+
+@import "_variable";
+@import "_mixin";
+
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+$size: (
+  0px,
+  5px,
+  10px,
+  15px,
+  20px,
+  30px
+);
+
 :root {
   font-size: 62.5%; /* (62.5/100) * 16px = 10px */
   --font-size--Xsmall: 1.2rem; /* 12px */
@@ -21,27 +42,6 @@
 .font-size--large {
   font-size: var(--font-size--large);
 }
-
-@import "_variable";
-@import "_mixin";
-
-
-*,
-*:before,
-*:after {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-$size: (
-  0px,
-  5px,
-  10px,
-  15px,
-  20px,
-  30px
-);
 
 @for $i from 1 to 7 {
   .p-#{$i} {
@@ -92,7 +92,7 @@ $size: (
   flex-direction: row;
 }
 
-.flex-rows-break {
+.flex-basis {
   flex-basis: 100%;
 }
 
@@ -180,6 +180,10 @@ $size: (
   }
 }
 
+.error {
+  color: red;
+}
+
 .wrapper {
   padding: 10px;
 }
@@ -193,14 +197,19 @@ header {
 
 .tab-nav {
   .tab-item {
-    font-size: 1.2rem;
     color: $l-normal;
     text-decoration: none;
     font-weight: bold;
-
+    filter: contrast(1);
     &:hover,
     &.tab-selected {
       color: $l-active;
+    }
+  }
+  @media #{$small-only} {
+    .breake-line {
+      flex-basis: 100%;
+      height: 5px;
     }
   }
 }
@@ -230,13 +239,16 @@ header {
     aspect-ratio: auto 1 / 1; 
 
   }
-
+  
+  .description {
+    padding-left: 20px;
+  }
   .description::before {
     content: "";
     display: inline-block;
     width: 8px;
     height: 8px;
-    margin-right: 10px;
+    margin: 0 10px 0 -18px;
     background: #96a1b2;
     border-radius: 50%;
   }

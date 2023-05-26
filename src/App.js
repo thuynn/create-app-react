@@ -31,6 +31,7 @@ function App() {
 
   const [tabNav, dispatch] = useReducer(tabReducer, initTab);
   const [currentEnpoint, setCurrentEnpoint] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     // load tabs
@@ -42,6 +43,10 @@ function App() {
           data: resp,
           type: "SET_DATA"
         });
+        selectTab(resp[0]);
+      },
+      onError: () => {
+        setErrorMessage("No internet connection!!!")
       }
     })
   }, []);
@@ -57,16 +62,22 @@ function App() {
 
   return (
     <div className="wrapper tab-container p-3">
-      <header className="flex align-items-end flex-wrap  tab-nav gap-3 p-3">
+      
+      <header className="flex align-items-end flex-wrap gap-3 p-3 top-header">
         <h1 className="flex-1 font-size--large nowrap">Please select one font</h1>
+        <div className="flex align-items-end flex-wrap gap-3 tab-nav">
         {
           tabNav.tabs.map((tab, index) => {
-            return (<TabNav key={index} info={tab} onClick={selectTab} isSelected={tab.id === tabNav.selectedTab} />)
+            return (
+              <TabNav key={index} tabIndex={index + 1} info={tab} onClick={selectTab} isSelected={tab.id === tabNav.selectedTab} />
+            )
           })
         }
+        </div>
       </header>
       <section className="tab-content radius-2">
         <TabContent contentEndpoint={currentEnpoint}/>
+        <div class="error align-center font-size--large p-6">{errorMessage}</div>
       </section>
     </div>
   );
