@@ -8,7 +8,7 @@ const Card = ({ info = {}, onClick = () => { }, isSelected = false }) => {
   }
 
   return (
-    <div className={cssClass.join(" ")} onClick={() => onClick(info)}>
+    <div className={cssClass.join(" ")} onClick={onClick}>
       <div className="font-type M-font radius-3 p-3" data-message={info["color-blind-label"]} style={{ backgroundColor: info.color}}>
         {info.abbr}
       </div>

@@ -1,33 +1,12 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect } from 'react';
+import { useTabContext } from '../store';
 import { getData } from '../api/get';
+
 import Card from './Card';
 
-const initTabContent = {
-  type: "",
-  content: null,
-  selectedCard: null
-};
+const TabContent = ({ startIndex = 0, contentEndpoint = "", setErrorMessage = () => { } }) => {
 
-const contentReducer = (state, action) => {
-  switch (action.type) {
-    case 'SET_CONTENT':
-      return {
-        ...state,
-        ...action.data
-      }
-    case 'SELECT_CARD':
-      return {
-        ...state,
-        selectedCard: action.selectedId
-      }
-    default:
-      return state;
-  }
-};
-
-const TabContent = ({ contentEndpoint = "" }) => {
-
-  const [tabContent, dispatch] = useReducer(contentReducer, initTabContent);
+  const [tabContent, dispatchContent] = useTabContext();
 
   useEffect(() => {
     if (contentEndpoint !== "") {
@@ -36,20 +15,23 @@ const TabContent = ({ contentEndpoint = "" }) => {
         path: contentEndpoint,
         onSuccess: (resp) => {
           // set data;
-          dispatch({
+          dispatchContent({
             data: resp,
             type: 'SET_CONTENT'
           });
+        },
+        onError: () => {
+          setErrorMessage("Get Content Tab Error");
         }
       });
     }
   }, [contentEndpoint]);
 
 
-  const selectCard = (cardInfo) => {
-    dispatch({
+  const selectCard = (cardId) => {
+    dispatchContent({
       type: "SELECT_CARD",
-      selectedId: cardInfo.id
+      selectedCard: cardId
     });
   };
 
@@ -59,8 +41,8 @@ const TabContent = ({ contentEndpoint = "" }) => {
         {
           tabContent.content.map((card, index) => {
             return (
-              <li className="card box-sm-12 box-md-6 cursor-pointer" key={index} tabIndex={index + 3} role="button">
-                <Card info={card} onClick={selectCard} isSelected={card.id === tabContent.selectedCard}/>
+              <li data-card={card.id} className="card box-sm-12 box-md-6 cursor-pointer" key={index} tabIndex={startIndex + index} role="button">
+                <Card info={card} onClick={() => selectCard(card.id)} isSelected={card.id === tabContent.selectedCard} />
               </li>
             );
           })
@@ -76,7 +58,7 @@ const TabContent = ({ contentEndpoint = "" }) => {
       </p>
     );
   }
-  
+
   return null;
 };
 
